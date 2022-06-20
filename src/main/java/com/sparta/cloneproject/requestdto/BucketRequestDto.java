@@ -1,4 +1,4 @@
 package com.sparta.cloneproject.requestdto;
 
-public class BucketRequsetDto {
+public class BucketRequestDto {
 }
