@@ -1,3 +1,4 @@
+
 spring:
   h2:
     console:
@@ -41,4 +42,12 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+
+
+
+
+
+
+
 
