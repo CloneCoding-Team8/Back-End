@@ -32,6 +32,15 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+cloud:
+  aws:
+    credentials:
+      access-key: AKIASJEGVRVUVZ3XDAUE
+      secret-key: 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
+    region:
+      static: ap-northesast-2
+    stack:
+      auto: false
 
 
 
