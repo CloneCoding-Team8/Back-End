@@ -1,5 +1,6 @@
 package com.sparta.cloneproject.model;
 
+
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.validator.UserValidator;
 import lombok.Getter;
@@ -38,4 +39,5 @@ public class User {
     public void encryptPassword(PasswordEncoder passwordEncoder) {
         password = passwordEncoder.encode(password);
     }
+
 }
