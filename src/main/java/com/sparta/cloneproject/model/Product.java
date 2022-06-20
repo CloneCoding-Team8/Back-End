@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @SequenceGenerator(
         name = "PRODUCT_ID_GENERATOR",
         sequenceName = "PRODUCT_SEQUENCES",
@@ -44,13 +46,6 @@ public class Product extends Timestamped {
     @Column
     private int star;
 
-//    @CreatedDate
-//    @Column
-//    private LocalDateTime createdAt;
-//
-//    @LastModifiedDate
-//    @Column
-//    private LocalDateTime modifiedAt;
 
     public Product(ProductRequestDto productRequestDto, Map<String , String> imgResult) {
         this.title = productRequestDto.getTitle();

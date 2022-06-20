@@ -8,15 +8,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 public class AwsS3Config {
-//    @Value("${cloud.aws.credentials.accessKey}")
-    @Value("AKIASJEGVRVUVZ3XDAUE")
+    @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
 
-//    @Value("${cloud.aws.credentials.secretKey}")
-    @Value("+/eaXcFf6hCT+1844Sot2BUCrpem7BJ2AhroCyU1")
+    @Value("${cloud.aws.credentials.secretKey}")
     private String secretKey;
-//    @Value("${cloud.aws.region.static}")
-    @Value("ap-northeast-2")
+    @Value("${cloud.aws.region.static}")
     private String region;
 
     @Bean

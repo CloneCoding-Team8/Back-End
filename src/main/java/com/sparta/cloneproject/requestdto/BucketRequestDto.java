@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BucketRequsetDto {
+public class BucketRequestDto {
     private Long productid;
 //    private Long userid;
     private int itemcount;
