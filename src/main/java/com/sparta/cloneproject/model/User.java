@@ -1,6 +1,7 @@
 package com.sparta.cloneproject.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.validator.UserValidator;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -25,6 +28,10 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Bucket> bucketList = new ArrayList<>();
 
     public User(UserRequestDto params, UserRoleEnum role) {
 

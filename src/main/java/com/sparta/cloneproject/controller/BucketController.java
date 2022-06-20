@@ -2,8 +2,10 @@ package com.sparta.cloneproject.controller;
 
 import com.sparta.cloneproject.requestdto.BucketRequestDto;
 import com.sparta.cloneproject.responsedto.BucketResponseDto;
+import com.sparta.cloneproject.security.UserDetailsImpl;
 import com.sparta.cloneproject.service.BucketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +18,13 @@ public class BucketController {
 
 
     @PostMapping("/api/product/item")
-    public void saveBucket(@RequestBody BucketRequestDto bucketRequestDto) {
-        bucketService.addBucket(bucketRequestDto);
+    public void saveBucket(@RequestBody BucketRequestDto bucketRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        bucketService.addBucket(bucketRequestDto, userDetails);
     }
 
     @GetMapping("/api/product/itemcheck")
-    public List<BucketResponseDto> myBucketList() {
-        return bucketService.myBucketList();
+    public List<BucketResponseDto> myBucketList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return bucketService.myBucketList(userDetails);
     }
 
     @DeleteMapping("/api/product/{productid}")
