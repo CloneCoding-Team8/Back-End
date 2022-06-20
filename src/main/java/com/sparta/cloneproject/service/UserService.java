@@ -12,7 +12,6 @@ import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
 import com.sparta.cloneproject.responsedto.ResponseMap;
 import com.sparta.cloneproject.security.JWT.JwtTokenProvider;
-
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
