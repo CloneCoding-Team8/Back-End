@@ -1,1 +1,44 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:cloneprojectdb
+    username: sa
+    password:
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bottlecofffin@gmail.com
+    password: pwcewokizdewtfnv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+
+cloud:
+  aws:
+    credentials:
+      access-Key: AKIASJEGVRVUVZ3XDAUE
+      secret-Key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
