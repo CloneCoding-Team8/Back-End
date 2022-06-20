@@ -25,22 +25,19 @@ public class Bucket {
                     generator = "BUCKET_ID_GENERATOR")
     private Long id;
 
-//    @JsonIgnore
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-
-
     @Column(nullable = false)
     private int itemCount;
 
-//    @Column(nullable = false)
-//    private int deliveryFee;
+
 
 }

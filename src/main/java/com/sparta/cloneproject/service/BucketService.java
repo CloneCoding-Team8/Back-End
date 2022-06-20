@@ -2,10 +2,13 @@ package com.sparta.cloneproject.service;
 
 import com.sparta.cloneproject.model.Bucket;
 import com.sparta.cloneproject.model.Product;
+import com.sparta.cloneproject.model.User;
 import com.sparta.cloneproject.repository.BucketRepository;
 import com.sparta.cloneproject.repository.ProductRepository;
+import com.sparta.cloneproject.repository.UserRepository;
 import com.sparta.cloneproject.requestdto.BucketRequestDto;
 import com.sparta.cloneproject.responsedto.BucketResponseDto;
+import com.sparta.cloneproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,14 +23,20 @@ import java.util.Optional;
 public class BucketService {
     private final ProductRepository productRepository;
     private final BucketRepository bucketRepository;
+    private final UserRepository userRepository;
 
     //장바구니 등록
     //장바구니에 이미 있는 상품은 기존 수량에 플러스
-    public void addBucket(BucketRequestDto bucketRequestDto) {
+    public void addBucket(BucketRequestDto bucketRequestDto, UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Product findProduct = productRepository.findById(bucketRequestDto.getProductid()).orElseThrow(null);
-        Optional<Bucket> byProductId = bucketRepository.findByProductLike(productRepository.findById(bucketRequestDto.getProductid())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        Product findProduct = productRepository.findById(bucketRequestDto.getProductid())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Optional<Bucket> byProductId = bucketRepository.findByProductLike(
+                productRepository.findById(bucketRequestDto.getProductid())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         if(byProductId.isPresent()) {
             int itemCount = byProductId.get().getItemCount();
@@ -37,14 +46,16 @@ public class BucketService {
         } else {
             Bucket bucket = new Bucket();
             bucket.setProduct(findProduct);
+            bucket.setUser(user);
             bucket.setItemCount(bucketRequestDto.getItemcount());
 
             bucketRepository.save(bucket);
         }
     }
     //장바구니 리스트 보기
-    public List<BucketResponseDto> myBucketList() {
-        List<Bucket> allBucket = bucketRepository.findAll();
+    public List<BucketResponseDto> myBucketList(UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        List<Bucket> allBucket = bucketRepository.findAllByUser(user);
         List<BucketResponseDto> list = new ArrayList<>();
 
         for (Bucket bucket : allBucket) {
@@ -64,7 +75,7 @@ public class BucketService {
 
     //장바구니 삭제
     public void deleteBucket(long bucketId) {
-        //Bucket bucket = bucketRepository.findById(bucketId).orElseThrow(null);
+
         bucketRepository.deleteById(bucketId);
     }
 
@@ -78,3 +89,11 @@ public class BucketService {
     }
 
 }
+
+
+
+//    Optional<Bucket> byProductId = bucketRepository.findByProductLikeAndUser(
+//            productRepository.findById(bucketRequestDto.getProductid())
+//                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)),
+//            userRepository.findById(userDetails.getUser().getId())
+//                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
