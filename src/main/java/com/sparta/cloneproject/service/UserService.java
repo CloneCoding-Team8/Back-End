@@ -88,6 +88,7 @@ public class UserService {
                 authRepository.delete(auth);
             }
         } catch (NullPointerException e) {
+            //RefreshToken이 잘못되어있거나 없는 경우
             result.setResponseData("code", ErrorCode.UNAUTHORIZEDException.getCode());
             result.setResponseData("message", ErrorCode.UNAUTHORIZEDException.getMessage());
             result.setResponseData("HttpStatus", ErrorCode.UNAUTHORIZEDException.getStatus());
