@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
 
                 // 주소 수정 부분
                 .allowedOrigins(
-                        
+
                         "http://localhost:3000",
                         "https://s3.ap-northeast-2.amazonaws.com/springboot-db",
                         "https://s3.ap-northeast-2.amazonaws.com/miniproject-coffeebara")
