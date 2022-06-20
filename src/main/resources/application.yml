@@ -11,6 +11,14 @@ spring:
     username: sa
     password:
 
+#  datasource:
+#    url: jdbc:mysql://springboot-database.chh8aypxdyul.ap-northeast-2.rds.amazonaws.com:3306/hanghaeblog
+#    username: admin
+#    password: 1tjddls4
+#    jpa:
+#      hibernate:
+#        ddl-auto: create
+
   servlet:
     multipart:
       max-file-size: 20MB
@@ -38,9 +46,9 @@ cloud:
       access-key: AKIASJEGVRVUVZ3XDAUE
       secret-key: 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
     region:
-      static: ap-northesast-2
+      static: ap-northeast-2
     stack:
-      auto: false
+      auto: 'false'
 
 
 
