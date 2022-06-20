@@ -12,7 +12,6 @@ import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
 import com.sparta.cloneproject.responsedto.ResponseMap;
 import com.sparta.cloneproject.security.JWT.JwtTokenProvider;
-
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -69,24 +66,32 @@ public class UserService {
     }
 
     //Access 토큰 재발급
-    public JwtResponseDto newAccessToken(RefreshTokenRequestDto refreshTokenRequestDto) {
+    public JwtResponseDto newAccessToken(RefreshTokenRequestDto refreshTokenRequestDto){
         ResponseMap result = new ResponseMap();
+
         Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
+        try{
+            // AccessToken은 만료되었지만 RefreshToken은 만료되지 않은 경우
+            if (jwtTokenProvider.validateToken(dbrefreshtoken.getRefreshtoken())) {
 
-        // AccessToken은 만료되었지만 RefreshToken은 만료되지 않은 경우
-        if (jwtTokenProvider.validateToken(dbrefreshtoken.getRefreshtoken())) {
+                User user = userRepository.findByUsername(dbrefreshtoken.getUsername()).orElse(null);
 
-            User user = userRepository.findByUsername(dbrefreshtoken.getUsername()).orElse(null);
-
-            String accessToken = jwtTokenProvider.createnewAccessToken(user);
-            result.setResponseData("accessToken", accessToken);
-            result.setResponseData("message", "새로운 토큰이 발급되었습니다.");
-        } else {
-            // RefreshToken 또한 만료된 경우는 로그인을 다시 진행해야 한다.
-            result.setResponseData("code", ErrorCode.ReLogin.getCode());
-            result.setResponseData("message", ErrorCode.ReLogin.getMessage());
-            result.setResponseData("HttpStatus", ErrorCode.ReLogin.getStatus());
-            
+                String accessToken = jwtTokenProvider.createnewAccessToken(user);
+                result.setResponseData("accessToken", accessToken);
+                result.setResponseData("message", "새로운 토큰이 발급되었습니다.");
+            } else {
+                // RefreshToken 또한 만료된 경우는 로그인을 다시 진행해야 한다.
+                result.setResponseData("code", ErrorCode.ReLogin.getCode());
+                result.setResponseData("message", ErrorCode.ReLogin.getMessage());
+                result.setResponseData("HttpStatus", ErrorCode.ReLogin.getStatus());
+                Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
+                authRepository.delete(auth);
+            }
+        } catch (NullPointerException e) {
+            //RefreshToken이 잘못되어있거나 없는 경우
+            result.setResponseData("code", ErrorCode.UNAUTHORIZEDException.getCode());
+            result.setResponseData("message", ErrorCode.UNAUTHORIZEDException.getMessage());
+            result.setResponseData("HttpStatus", ErrorCode.UNAUTHORIZEDException.getStatus());
         }
         return result;
     }
