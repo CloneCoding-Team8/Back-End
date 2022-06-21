@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // login 없이 접근 허용 하는 url
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/product/**").permitAll()
+                .antMatchers("/product/list/**").permitAll()
                 .antMatchers("/review/list/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/css/**").permitAll()

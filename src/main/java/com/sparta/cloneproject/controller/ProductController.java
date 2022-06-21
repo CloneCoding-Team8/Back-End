@@ -29,12 +29,12 @@ public class ProductController {
         productService.createProduct(productRequestDto,multipartFile);
     }
 
-    @GetMapping("/api/product/{productid}")
+    @GetMapping("/api/product/list/{productid}")
     public Optional<Product> getProductDetails(@PathVariable Long productid) {
         return productService.getProductDetails(productid);
     }
 
-    @GetMapping("/api/product")
+    @GetMapping("/api/product/list")
     public Page<Product> getAllProductList(@PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 //            @RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("sortBy") String sortBy, @RequestParam("isAsc") boolean isAsc
         ) {
