@@ -68,7 +68,7 @@ public class UserService {
     //Access 토큰 재발급
     public JwtResponseDto newAccessToken(RefreshTokenRequestDto refreshTokenRequestDto){
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
-        ResponseMap result = new ResponseMap();
+//        ResponseMap result = new ResponseMap();
 
         Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
         try{
