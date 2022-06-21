@@ -13,7 +13,9 @@ import com.sparta.cloneproject.responsedto.JwtResponseDto;
 import com.sparta.cloneproject.responsedto.UserResponseDto;
 import com.sparta.cloneproject.security.JWT.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,19 +35,18 @@ public class UserService {
     private final AuthRepository authRepository;
 
     //회원가입
-    public UserResponseDto signupUser(UserRequestDto singUpData) {
-        UserResponseDto userResponseDto = new UserResponseDto();
-
+    public ResponseEntity<?> signupUser(UserRequestDto singUpData) {
+//        UserResponseDto userResponseDto = new UserResponseDto();
         UserRoleEnum role = UserRoleEnum.USER;
 
         User beforeSaveUser = new User(singUpData, role);
         beforeSaveUser.encryptPassword(passwordEncoder);
         userRepository.save(beforeSaveUser);
 
-        userResponseDto.setCode(201);
-        userResponseDto.setMessage("회원가입이 완료되었습니다.");
-        userResponseDto.setStstus(HttpStatus.CREATED);
-        return userResponseDto;
+//        userResponseDto.setCode(201);
+//        userResponseDto.setMessage("회원가입이 완료되었습니다.");
+//        userResponseDto.setStstus(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     //아이디 중복 검사
@@ -56,7 +57,6 @@ public class UserService {
 
     //로그인
     public JwtResponseDto loginUser(UserRequestDto loginData) {
-
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginData.getUsername(), loginData.getPassword()));
@@ -111,9 +111,10 @@ public class UserService {
     }
 
     //로그아웃
-    public void logout(RefreshTokenRequestDto refreshTokenRequestDto) {
-        Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
+    public ResponseEntity<?> logout(RefreshTokenRequestDto refreshTokenRequestDto) {
+        Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(13));
         authRepository.delete(auth);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //JWT 토큰 생성기

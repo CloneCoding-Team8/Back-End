@@ -3,18 +3,13 @@ package com.sparta.cloneproject.service;
 import com.sparta.cloneproject.model.Review;
 import com.sparta.cloneproject.repository.ReviewRepository;
 import com.sparta.cloneproject.requestdto.ReviewRequestDto;
-import com.sparta.cloneproject.responsedto.ReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,7 +42,7 @@ public class ReviewService {
 
     // Review 수정
     @Transactional
-    public String update(Long reviewid, ReviewRequestDto requestDto, String username) {
+    public String updateReview(Long reviewid, ReviewRequestDto requestDto, String username) {
         Review review = reviewRepository.findById(reviewid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않습니다."));
         String writerId = review.getUsername();
