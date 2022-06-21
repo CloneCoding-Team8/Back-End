@@ -1,6 +1,7 @@
 package com.sparta.cloneproject.controller;
 
 import com.sparta.cloneproject.model.Review;
+import com.sparta.cloneproject.repository.ReviewRepository;
 import com.sparta.cloneproject.requestdto.ReviewRequestDto;
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import com.sparta.cloneproject.service.ReviewService;
@@ -19,11 +20,20 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    private final ReviewRepository reviewRepository;
+
     // 상품 id 로 Review 조회
     @GetMapping("/api/review/list/{productid}")
     public Page<Review> getReview(@PathVariable Long productid,
                                   @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reviewService.getReview(productid, pageable);
+    }
+
+    // reviewid로 Review 조회
+    @GetMapping("/api/review/detail/{reviewid}")
+    public Review getThatReview(@PathVariable Long reviewid) {
+        return reviewRepository.findById(reviewid).orElseThrow(
+                ()->new IllegalArgumentException("해당 후기가 존재하지 않습니다."));
     }
 
     // Review 작성
