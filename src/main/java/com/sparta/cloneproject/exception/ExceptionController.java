@@ -14,6 +14,13 @@ public class ExceptionController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @ExceptionHandler(CustomSignUpException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleCustomSignUpException(CustomSignUpException ex){
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SingUpDataValidException.getCode(), ErrorCode.SingUpDataValidException.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex){

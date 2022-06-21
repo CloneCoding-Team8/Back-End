@@ -10,9 +10,8 @@ public class JwtResponseDto {
     private int code = HttpStatus.OK.value();
     private String accesstoken;
     private String refreshtoken;
-    private String tokenmessage;
 
-    private String errormessage;
+    private String message;
     private HttpStatus errorststus;
 
     private Object result;
