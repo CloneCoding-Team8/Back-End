@@ -97,3 +97,30 @@ public class BucketService {
 //                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)),
 //            userRepository.findById(userDetails.getUser().getId())
 //                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+
+
+//    //장바구니 등록
+//    //장바구니에 이미 있는 상품은 기존 수량에 플러스
+//    public void addBucket(BucketRequestDto bucketRequestDto, UserDetailsImpl userDetails) {
+//        User user = userRepository.findById(userDetails.getUser().getId())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        Product findProduct = productRepository.findById(bucketRequestDto.getProductid())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        Optional<Bucket> byProductId = bucketRepository.findByProductLike(
+//                productRepository.findById(bucketRequestDto.getProductid())
+//                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+//
+//        if(byProductId.isPresent()) {
+//            int itemCount = byProductId.get().getItemCount();
+//            itemCount += bucketRequestDto.getItemcount();
+//            byProductId.get().setItemCount(itemCount);
+//            bucketRepository.save(byProductId.get());
+//        } else {
+//            Bucket bucket = new Bucket();
+//            bucket.setProduct(findProduct);
+//            bucket.setUser(user);
+//            bucket.setItemCount(bucketRequestDto.getItemcount());
+//
+//            bucketRepository.save(bucket);

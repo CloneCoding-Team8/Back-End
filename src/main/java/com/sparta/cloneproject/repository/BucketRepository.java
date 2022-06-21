@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface BucketRepository extends JpaRepository<Bucket, Long> {
     Optional<Bucket> findByProductLike(Product product);
+    Optional<Bucket> findByProductAndUser(Product product, User user);
     List<Bucket> findAllByUser(User user);
 }
