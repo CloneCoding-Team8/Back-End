@@ -67,6 +67,7 @@ public class UserService {
 
     //Access 토큰 재발급
     public JwtResponseDto newAccessToken(RefreshTokenRequestDto refreshTokenRequestDto){
+        JwtResponseDto jwtResponseDto = new JwtResponseDto();
         ResponseMap result = new ResponseMap();
 
         Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
@@ -77,23 +78,34 @@ public class UserService {
                 User user = userRepository.findByUsername(dbrefreshtoken.getUsername()).orElse(null);
 
                 String accessToken = jwtTokenProvider.createnewAccessToken(user);
-                result.setResponseData("accessToken", accessToken);
-                result.setResponseData("message", "새로운 토큰이 발급되었습니다.");
+                jwtResponseDto.setAccesstoken(accessToken);
+                jwtResponseDto.setTokenmessage("새로운 토큰이 발급되었습니다.");
+
+//                result.setResponseData("accessToken", accessToken);
+//                result.setResponseData("message", "새로운 토큰이 발급되었습니다.");
             } else {
                 // RefreshToken 또한 만료된 경우는 로그인을 다시 진행해야 한다.
-                result.setResponseData("code", ErrorCode.ReLogin.getCode());
-                result.setResponseData("message", ErrorCode.ReLogin.getMessage());
-                result.setResponseData("HttpStatus", ErrorCode.ReLogin.getStatus());
+                jwtResponseDto.setCode(ErrorCode.ReLogin.getCode());
+                jwtResponseDto.setErrormessage(ErrorCode.ReLogin.getMessage());
+                jwtResponseDto.setErrorststus(ErrorCode.ReLogin.getStatus());
+
+//                result.setResponseData("code", ErrorCode.ReLogin.getCode());
+//                result.setResponseData("message", ErrorCode.ReLogin.getMessage());
+//                result.setResponseData("HttpStatus", ErrorCode.ReLogin.getStatus());
                 Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
                 authRepository.delete(auth);
             }
         } catch (NullPointerException e) {
             //RefreshToken이 잘못되어있거나 없는 경우
-            result.setResponseData("code", ErrorCode.UNAUTHORIZEDException.getCode());
-            result.setResponseData("message", ErrorCode.UNAUTHORIZEDException.getMessage());
-            result.setResponseData("HttpStatus", ErrorCode.UNAUTHORIZEDException.getStatus());
+            jwtResponseDto.setCode(ErrorCode.UNAUTHORIZEDException.getCode());
+            jwtResponseDto.setErrormessage(ErrorCode.UNAUTHORIZEDException.getMessage());
+            jwtResponseDto.setErrorststus(ErrorCode.UNAUTHORIZEDException.getStatus());
+
+//            result.setResponseData("code", ErrorCode.UNAUTHORIZEDException.getCode());
+//            result.setResponseData("message", ErrorCode.UNAUTHORIZEDException.getMessage());
+//            result.setResponseData("HttpStatus", ErrorCode.UNAUTHORIZEDException.getStatus());
         }
-        return result;
+        return jwtResponseDto;
     }
 
     //로그아웃
@@ -104,7 +116,8 @@ public class UserService {
 
     //JWT 토큰 생성기
     private JwtResponseDto createJwtToken(Authentication authentication) {
-        ResponseMap result = new ResponseMap();
+        JwtResponseDto jwtResponseDto = new JwtResponseDto();
+//        ResponseMap result = new ResponseMap();
 
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 
@@ -114,9 +127,13 @@ public class UserService {
         Auth auth = new Auth(principal.getUsername(), refreshToken);
         authRepository.save(auth);
 
-        result.setResponseData("accessToken", accessToken);
-        result.setResponseData("refreshToken", refreshToken);
+        jwtResponseDto.setCode(201);
+        jwtResponseDto.setAccesstoken(accessToken);
+        jwtResponseDto.setRefreshtoken(refreshToken);
 
-        return result;
+//        result.setResponseData("accessToken", accessToken);
+//        result.setResponseData("refreshToken", refreshToken);
+
+        return jwtResponseDto;
     }
 }
