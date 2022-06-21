@@ -78,6 +78,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
 
+                //토큰 예외 처리
+                .exceptionHandling()
+                .authenticationEntryPoint(new AuthenticationEntryPointHandler())
+                .and()
+
                 // 토큰 기반 인증이기 때문에 session 사용 x
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
