@@ -112,7 +112,7 @@ public class UserService {
 
     //로그아웃
     public ResponseEntity<?> logout(RefreshTokenRequestDto refreshTokenRequestDto) {
-        Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(10));
+        Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(13));
         authRepository.delete(auth);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
