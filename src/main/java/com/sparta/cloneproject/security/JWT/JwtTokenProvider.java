@@ -23,7 +23,7 @@ public class JwtTokenProvider {
     // jwt 시크릿 키
     private String secretKey = "A1000forStoreZ";
 
-    private final long accessTokenValidTime = 30 * 1000L;   // access 토큰 유효시간 5분
+    private final long accessTokenValidTime = 10 * 60 * 1000L;   // access 토큰 유효시간 5분
     private final long refreshTokenValidTime = 60 * 60 * 1000L; // refresh 토큰 유효시간 30분
 
     // 객체 초기화, secretKey를 Base64로 인코딩
@@ -77,7 +77,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
 
                 //토큰 만료 시간
-                .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidTime))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
 
                 //토큰 암호화
                 .signWith(SignatureAlgorithm.HS256, secretKey)
