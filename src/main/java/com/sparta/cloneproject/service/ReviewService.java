@@ -47,7 +47,7 @@ public class ReviewService {
                 () -> new IllegalArgumentException("존재하지 않습니다."));
         String writerId = review.getUsername();
         if (Objects.equals(writerId, username)) {
-            review.update(requestDto);
+            review.reviewUpdate(requestDto);
             return "후기 수정 완료";
         }
         return "작성한 유저가 아닙니다.";
