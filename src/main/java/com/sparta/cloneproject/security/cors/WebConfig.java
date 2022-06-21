@@ -25,8 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
 
                         "http://localhost:3000",
-                        "https://s3.ap-northeast-2.amazonaws.com/springboot-db",
-                        "https://s3.ap-northeast-2.amazonaws.com/miniproject-coffeebara")
+                        "https://s3.ap-northeast-2.amazonaws.com/cloneprojectbucket")
                 .allowedMethods("POST", "GET","PATCH", "DELETE", "HEAD", "OPTIONS")
                 .allowCredentials(true);
     }
