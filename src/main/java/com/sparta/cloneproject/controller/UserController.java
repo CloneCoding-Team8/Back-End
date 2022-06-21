@@ -3,6 +3,7 @@ package com.sparta.cloneproject.controller;
 import com.sparta.cloneproject.requestdto.RefreshTokenRequestDto;
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
+import com.sparta.cloneproject.responsedto.UserResponseDto;
 import com.sparta.cloneproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class UserController {
 
     //회원가입
     @PostMapping("/signup")
-    public HttpStatus signupUser(@RequestBody UserRequestDto singUpData) {
+    public UserResponseDto signupUser(@RequestBody UserRequestDto singUpData) {
         return userService.signupUser(singUpData);
     }
 

@@ -1,12 +1,9 @@
 package com.sparta.cloneproject.security.JWT;
 
 import com.sparta.cloneproject.model.User;
-import com.sparta.cloneproject.model.UserRoleEnum;
-import com.sparta.cloneproject.security.UserDetailsImpl;
 import com.sparta.cloneproject.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,13 +18,12 @@ import java.util.*;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-
     private final UserDetailsServiceImpl userDetailsService;
 
     // jwt 시크릿 키
     private String secretKey = "A1000forStoreZ";
 
-    private final long accessTokenValidTime = 10 * 60 * 1000L;   // access 토큰 유효시간 5분
+    private final long accessTokenValidTime = 30 * 1000L;   // access 토큰 유효시간 5분
     private final long refreshTokenValidTime = 60 * 60 * 1000L; // refresh 토큰 유효시간 30분
 
     // 객체 초기화, secretKey를 Base64로 인코딩
@@ -36,6 +32,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
+    // Access 토큰 생성
     public String createnewAccessToken(User user) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
@@ -45,7 +42,7 @@ public class JwtTokenProvider {
         payloads.put("Role", user.getRole());
         payloads.put("nickname",user.getNickname());
 
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setHeader(headers)
                 .setClaims(payloads)
@@ -60,35 +57,21 @@ public class JwtTokenProvider {
                 //토큰 암호화
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-
-        return jwt;
     }
 
-    public String generateAccessToken(UserDetailsImpl userDetails) {
+    // Refresh 토큰 생성
+    public String createRefreshToken(User user) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("type", "token");
 
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put("username", user.getUsername());
 
-        val isAdmin = userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_" + UserRoleEnum.ADMIN));
-        if (isAdmin) {
-            claims.put("Role","ADMIN");
-        } else {
-            claims.put("Role","USER");
-        }
-
-        val username = userDetails.getUsername();
-        claims.put("Username", username);
-
-        val nickname = userDetails.getNickname();
-        claims.put("nickname", nickname);
-
-        return doGenerateAccessToken(claims, userDetails.getUsername());
-    }
-
-    private String doGenerateAccessToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")
-                .setClaims(claims)
-                .setSubject(subject)
+                .setHeader(headers)
+                .setClaims(payloads)
+                .setSubject(user.getUsername())
 
                 //토큰 생성 시간
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -101,41 +84,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(UserDetailsImpl userDetails) {
-
-        Map<String, Object> claims = new HashMap<>();
-
-        val username = userDetails.getUsername();
-        claims.put("Username", username);
-
-        return doGenerateRefreshToken(claims, userDetails.getUsername());
-    }
-
-    private String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setHeaderParam("typ","JWT")
-                .setClaims(claims)
-                .setSubject(subject)
-
-                //토큰 생성 시간
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-
-                //토큰 만료 시간
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
-
-                //토큰 암호화
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-    }
-
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 토큰에서 회원 정보 추출
-    public String getUserPk(String token) {
+    public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -169,10 +125,5 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    //refresh token 정보 얻어내기
-    public Claims getClaimsFromJwtToken(String jwtToken) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
     }
 }

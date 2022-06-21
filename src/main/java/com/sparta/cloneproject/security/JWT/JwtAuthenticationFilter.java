@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
             val jwtToken = token.substring(7);
 
-            if (jwtTokenProvider.validateToken(jwtToken)) {
+            if (jwtTokenProvider.validateJwtToken(request, jwtToken)) {
 
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옴
                 Authentication authentication = jwtTokenProvider.getAuthentication(jwtToken);
