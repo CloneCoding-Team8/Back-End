@@ -34,9 +34,11 @@ public class BucketService {
         Product findProduct = productRepository.findById(bucketRequestDto.getProductid())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Optional<Bucket> byProductId = bucketRepository.findByProductLike(
-                productRepository.findById(bucketRequestDto.getProductid())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        Optional<Bucket> byProductId = bucketRepository.findByProductAndUser(
+        productRepository.findById(bucketRequestDto.getProductid())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)),
+        userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         if(byProductId.isPresent()) {
             int itemCount = byProductId.get().getItemCount();

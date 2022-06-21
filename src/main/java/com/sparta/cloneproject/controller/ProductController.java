@@ -35,13 +35,12 @@ public class ProductController {
     }
 
     @GetMapping("/api/product/list")
-    public Page<Product> getAllProductList(@PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-//            @RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("sortBy") String sortBy, @RequestParam("isAsc") boolean isAsc
-        ) {
+    public Page<Product> getAllProductList(@PageableDefault(
+                        size = 3,
+                        sort = "createdAt",
+                        direction = Sort.Direction.DESC) Pageable pageable) {
 
-//        page = page - 1;
 
-//        return productService.getAllProductList(page, size, sortBy, isAsc);
         return productService.getAllProductList(pageable);
     }
 }

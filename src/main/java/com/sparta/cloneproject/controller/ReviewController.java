@@ -1,9 +1,7 @@
 package com.sparta.cloneproject.controller;
 
 import com.sparta.cloneproject.model.Review;
-import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import com.sparta.cloneproject.requestdto.ReviewRequestDto;
-import com.sparta.cloneproject.responsedto.ReviewResponseDto;
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import com.sparta.cloneproject.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
