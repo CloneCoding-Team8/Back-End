@@ -1,4 +1,4 @@
-//package com.project.mini.aws;
+
 package com.sparta.cloneproject.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

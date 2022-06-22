@@ -11,6 +11,7 @@ import com.sparta.cloneproject.responsedto.BucketResponseDto;
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,9 +35,11 @@ public class BucketService {
         Product findProduct = productRepository.findById(bucketRequestDto.getProductid())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Optional<Bucket> byProductId = bucketRepository.findByProductLike(
-                productRepository.findById(bucketRequestDto.getProductid())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        Optional<Bucket> byProductId = bucketRepository.findByProductAndUser(
+        productRepository.findById(bucketRequestDto.getProductid())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)),
+        userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         if(byProductId.isPresent()) {
             int itemCount = byProductId.get().getItemCount();
@@ -74,18 +77,19 @@ public class BucketService {
     }
 
     //장바구니 삭제
-    public void deleteBucket(long bucketId) {
+    public ResponseEntity<?> deleteBucket(long bucketId) {
 
         bucketRepository.deleteById(bucketId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //장바구니에서 특정상품 수량 변경
-    public void changeItemCount(BucketRequestDto bucketRequestDto) {
+    public ResponseEntity<?> changeItemCount(BucketRequestDto bucketRequestDto) {
         Bucket bucket = bucketRepository.findById(bucketRequestDto.getProductid())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
         bucket.setItemCount(bucketRequestDto.getItemcount());
-        bucketRepository.save(bucket);
+
+        return new ResponseEntity<>(bucketRepository.save(bucket),HttpStatus.NO_CONTENT);
     }
 
 }
@@ -97,3 +101,30 @@ public class BucketService {
 //                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)),
 //            userRepository.findById(userDetails.getUser().getId())
 //                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+
+
+//    //장바구니 등록
+//    //장바구니에 이미 있는 상품은 기존 수량에 플러스
+//    public void addBucket(BucketRequestDto bucketRequestDto, UserDetailsImpl userDetails) {
+//        User user = userRepository.findById(userDetails.getUser().getId())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        Product findProduct = productRepository.findById(bucketRequestDto.getProductid())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        Optional<Bucket> byProductId = bucketRepository.findByProductLike(
+//                productRepository.findById(bucketRequestDto.getProductid())
+//                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+//
+//        if(byProductId.isPresent()) {
+//            int itemCount = byProductId.get().getItemCount();
+//            itemCount += bucketRequestDto.getItemcount();
+//            byProductId.get().setItemCount(itemCount);
+//            bucketRepository.save(byProductId.get());
+//        } else {
+//            Bucket bucket = new Bucket();
+//            bucket.setProduct(findProduct);
+//            bucket.setUser(user);
+//            bucket.setItemCount(bucketRequestDto.getItemcount());
+//
+//            bucketRepository.save(bucket);

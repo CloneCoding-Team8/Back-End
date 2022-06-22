@@ -19,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final AwsS3Service s3Service;
     private final ReviewRepository reviewRepository;
+    private final AwsS3Service s3Service;
 
     //새 상품 등록(백엔드용)
     public void createProduct(ProductRequestDto productRequestDto, MultipartFile multipartFile) {
@@ -34,11 +34,63 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
-    //전체상품 리스팅 int page, int size, String sortBy, boolean isAsc
+    //전체상품 리스팅
     public Page<Product> getAllProductList(Pageable pageble) {
-//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-//        Sort sort = Sort.by(direction, sortBy);
-//        Pageable pageable = PageRequest.of(page, size, sort);
+
         return productRepository.findAllByOrderByCreatedAtDesc(pageble);
+    }
+
+    public void avgStarR(Long reviewid) {
+//        List<Review> reviews = reviewRepository.findByProductid(productid);
+        Optional<Review> a = reviewRepository.findById(reviewid);
+        Long productid1 = a.get().getProductid();
+
+        Product product = productRepository.findById(productid1).orElseThrow(null);
+        List<Review> list = reviewRepository.findAllByProductid(productid1);
+
+        int sumStar = 0;
+        double avgStar = 0;
+
+        for (Review review : list) {
+           sumStar += review.getStar();
+        }
+
+        avgStar = Math.round((sumStar/product.getReviewCount()) *100)/100.0;
+        product.setStar(avgStar);
+        productRepository.save(product);
+    }
+
+    public void avgStarP(Long productid) {
+//        List<Review> reviews = reviewRepository.findByProductid(productid);
+        Product product = productRepository.findById(productid).orElseThrow(null);
+        List<Review> list = reviewRepository.findAllByProductid(productid);
+
+        int sumStar = 0;
+        double avgStar = 0;
+
+        for (Review review : list) {
+            sumStar += review.getStar();
+        }
+
+        avgStar = sumStar/product.getReviewCount();
+        product.setStar(avgStar);
+        productRepository.save(product);
+    }
+
+    public void reveiwCountP(Long productid) {
+        int reveiwCount = reviewRepository.findAllByProductid(productid).size();
+        Product product = productRepository.findById(productid).orElseThrow(null);
+        product.setReviewCount(reveiwCount);
+        productRepository.save(product);
+    }
+
+    public void reveiwCountR(Long reviewid) {
+        Optional<Review> a = reviewRepository.findById(reviewid);
+        Long productid1 = a.get().getProductid();
+
+        int reveiwCount = reviewRepository.findAllByProductid(productid1).size();
+        Product product = productRepository.findById(productid1).orElseThrow(null);
+        product.setReviewCount(reveiwCount);
+        productRepository.save(product);
     }
 }

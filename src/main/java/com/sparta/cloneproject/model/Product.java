@@ -1,16 +1,12 @@
 package com.sparta.cloneproject.model;
 
-import com.sparta.cloneproject.repository.ProductRepository;
 import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
@@ -18,18 +14,12 @@ import java.util.Map;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SequenceGenerator(
-        name = "PRODUCT_ID_GENERATOR",
-        sequenceName = "PRODUCT_SEQUENCES",
-        initialValue = 1, allocationSize = 1
-)
 @Table(name = "PRODUCT")
 public class Product extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "POST_ID_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -44,10 +34,10 @@ public class Product extends Timestamped {
     private int deliveryFee;
 
     @Column
-    private double avgstar;
+    private double star;
 
     @Column
-    private int reviewcount = 0;
+    private int reviewCount = 0;
 
 
     public Product(ProductRequestDto productRequestDto, Map<String , String> imgResult) {
@@ -58,10 +48,10 @@ public class Product extends Timestamped {
     }
 
     public void upreviewcount(){
-        reviewcount++;
+        reviewCount++;
     }
 
     public void downreviewcount(){
-        reviewcount--;
+        reviewCount--;
     }
 }

@@ -22,7 +22,7 @@ public class ReviewResponseDto {
 
     @Builder
     public ReviewResponseDto(Review content) {
-        this.id = content.getReviewid();
+        this.id = content.getId();
         this.nickname = content.getNickname();
         this.username = content.getUsername();
         this.modified = content.getModifiedAt();
