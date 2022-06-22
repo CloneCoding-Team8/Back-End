@@ -1,7 +1,9 @@
 package com.sparta.cloneproject.service;
 
 import com.sparta.cloneproject.model.Product;
+import com.sparta.cloneproject.model.Review;
 import com.sparta.cloneproject.repository.ProductRepository;
+import com.sparta.cloneproject.repository.ReviewRepository;
 import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
     private final AwsS3Service s3Service;
+    private final ReviewRepository reviewRepository;
 
     //새 상품 등록(백엔드용)
     public void createProduct(ProductRequestDto productRequestDto, MultipartFile multipartFile) {
