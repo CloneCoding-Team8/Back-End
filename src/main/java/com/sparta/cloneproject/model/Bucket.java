@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -35,6 +36,7 @@ public class Bucket {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Min(1)
     @Column(nullable = false)
     private int itemCount;
 

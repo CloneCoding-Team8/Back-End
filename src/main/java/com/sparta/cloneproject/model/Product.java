@@ -1,16 +1,12 @@
 package com.sparta.cloneproject.model;
 
-import com.sparta.cloneproject.repository.ProductRepository;
 import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
@@ -52,5 +48,13 @@ public class Product extends Timestamped {
         this.productimg = imgResult.get("url");
         this.deliveryFee = productRequestDto.getDeliveryFee();
         this.price = productRequestDto.getPrice();
+    }
+
+    public Product(ProductRequestDto requestDto, String productimg, Long productId) {
+        this.productId = productId;
+        this.title = requestDto.getTitle();
+        this.deliveryFee = requestDto.getDeliveryFee();
+        this.price = requestDto.getPrice();
+        this.productimg = productimg;
     }
 }
