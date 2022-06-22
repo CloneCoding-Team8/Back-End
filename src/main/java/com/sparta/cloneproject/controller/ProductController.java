@@ -26,7 +26,7 @@ public class ProductController {
     public void createProduct(@RequestPart(value = "img",required = false) MultipartFile multipartFile,
                               @RequestPart(value = "productRequestDto") ProductRequestDto productRequestDto) {
 
-        productService.createProduct(productRequestDto,multipartFile);
+        productService.createProduct(productRequestDto, multipartFile);
     }
 
     @GetMapping("/api/product/list/{productid}")
@@ -38,9 +38,7 @@ public class ProductController {
     public Page<Product> getAllProductList(@PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 //            @RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("sortBy") String sortBy, @RequestParam("isAsc") boolean isAsc
         ) {
-
 //        page = page - 1;
-
 //        return productService.getAllProductList(page, size, sortBy, isAsc);
         return productService.getAllProductList(pageable);
     }
