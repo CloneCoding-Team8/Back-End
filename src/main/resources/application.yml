@@ -39,8 +39,8 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: 확인
+      secretKey: 깃헙 확인
 #    s3:
 #      bucket:
 #        url: https://s3.ap-northeast-2.amazonaws.com/miniproject-coffeebara
