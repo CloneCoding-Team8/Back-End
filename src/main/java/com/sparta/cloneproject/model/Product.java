@@ -40,7 +40,10 @@ public class Product extends Timestamped {
     private int deliveryFee;
 
     @Column
-    private int star;
+    private double star;
+
+    @Column
+    private int reviewCount;
 
 
     public Product(ProductRequestDto productRequestDto, Map<String , String> imgResult) {

@@ -11,6 +11,7 @@ import com.sparta.cloneproject.responsedto.BucketResponseDto;
 import com.sparta.cloneproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -76,18 +77,19 @@ public class BucketService {
     }
 
     //장바구니 삭제
-    public void deleteBucket(long bucketId) {
+    public ResponseEntity<?> deleteBucket(long bucketId) {
 
         bucketRepository.deleteById(bucketId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //장바구니에서 특정상품 수량 변경
-    public void changeItemCount(BucketRequestDto bucketRequestDto) {
+    public ResponseEntity<?> changeItemCount(BucketRequestDto bucketRequestDto) {
         Bucket bucket = bucketRepository.findById(bucketRequestDto.getProductid())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
         bucket.setItemCount(bucketRequestDto.getItemcount());
-        bucketRepository.save(bucket);
+
+        return new ResponseEntity<>(bucketRepository.save(bucket),HttpStatus.NO_CONTENT);
     }
 
 }

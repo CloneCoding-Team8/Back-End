@@ -1,6 +1,7 @@
 package com.sparta.cloneproject.controller;
 
 import com.sparta.cloneproject.model.Product;
+import com.sparta.cloneproject.requestdto.BucketRequestDto;
 import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import com.sparta.cloneproject.service.ProductService;
 import lombok.RequiredArgsConstructor;

@@ -6,6 +6,7 @@ import com.sparta.cloneproject.repository.ReviewRepository;
 
 import com.sparta.cloneproject.requestdto.ReviewRequestDto;
 import com.sparta.cloneproject.security.UserDetailsImpl;
+import com.sparta.cloneproject.service.ProductService;
 import com.sparta.cloneproject.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    private final ProductService productService;
 
     private final ReviewRepository reviewRepository;
 
@@ -48,6 +51,8 @@ public class ReviewController {
         String username = userDetails.getUsername();
         String nickname = userDetails.getNickname();
         reviewService.createReview(productid, itemimg, requestDto, nickname, username);
+        productService.reveiwCountP(productid);
+        productService.avgStarP(productid);
         return "후기 작성 완료";
     }
 
@@ -57,6 +62,8 @@ public class ReviewController {
                                @RequestBody ReviewRequestDto requestDto,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
+        productService.reveiwCountR(reviewid);
+        productService.avgStarR(reviewid);
         return reviewService.updateReview(reviewid, requestDto, username);
     }
 
@@ -65,6 +72,8 @@ public class ReviewController {
     public String deleteReview(@PathVariable Long reviewid,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
+        productService.reveiwCountR(reviewid);
+        productService.avgStarR(reviewid);
         return reviewService.deleteReview(reviewid, username);
     }
 }
