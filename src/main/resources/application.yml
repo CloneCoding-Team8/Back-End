@@ -39,8 +39,8 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: AKIASJEGVRVUVZ3XDAUE
-      secretKey: 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
+      accessKey: 
+      secretKey: 
 #    s3:
 #      bucket:
 #        url: https://s3.ap-northeast-2.amazonaws.com/miniproject-coffeebara
