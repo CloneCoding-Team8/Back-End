@@ -52,9 +52,16 @@ public class ReviewService {
     public String updateReview(Long reviewid, ReviewRequestDto requestDto, String username) {
         Review review = reviewRepository.findById(reviewid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않습니다."));
+
         String writerId = review.getUsername();
+        Long productid = review.getProductid();
+
         if (Objects.equals(writerId, username)) {
+            Product product = productRepository.findById(productid).orElse(null);
+            product.setStar(product.getStar() - (double)review.getStar() + requestDto.getStar());
+
             review.reviewUpdate(requestDto);
+
             return "후기 수정 완료";
         }
         return "작성한 유저가 아닙니다.";
