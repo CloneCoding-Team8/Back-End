@@ -26,6 +26,7 @@ import java.util.Optional;
 @Transactional
 @Service
 public class UserService {
+
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;

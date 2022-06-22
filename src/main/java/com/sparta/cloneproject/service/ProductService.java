@@ -6,6 +6,7 @@ import com.sparta.cloneproject.requestdto.ProductRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class ProductService {
 
     //상품 상세페이지
     public Optional<Product> getProductDetails(Long productId) {
+
         return productRepository.findById(productId);
     }
 

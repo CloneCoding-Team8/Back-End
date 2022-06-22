@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.util.Map;
 
 @Getter
@@ -27,11 +28,17 @@ public class Product extends Timestamped {
     @Column(nullable = false)
     private int price;
 
+    @Column
+    private String commaPrice;
+
     @Column(nullable = false)
     private String productimg;
 
     @Column(nullable = false)
     private int deliveryFee;
+
+    @Column
+    private String commaDeliveryFee;
 
     @Column
     private double star;
@@ -45,8 +52,11 @@ public class Product extends Timestamped {
         this.productimg = imgResult.get("url");
         this.deliveryFee = productRequestDto.getDeliveryFee();
         this.price = productRequestDto.getPrice();
+        DecimalFormat df = new DecimalFormat("###,###");
+        this.commaPrice = df.format(productRequestDto.getPrice());
+        this.commaDeliveryFee = df.format(productRequestDto.getDeliveryFee());
     }
-
+//Integer.toString(this.deliveryFee).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
     public void upreviewcount(){
         reviewCount++;
     }

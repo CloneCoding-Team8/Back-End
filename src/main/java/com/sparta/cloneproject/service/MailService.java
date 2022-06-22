@@ -57,8 +57,8 @@ public class MailService {
             bucketResponseDto.setId(all.get(i).getId());
             bucketResponseDto.setTitle(all.get(i).getProduct().getTitle());
             bucketResponseDto.setPrice(all.get(i).getProduct().getPrice());
-            bucketResponseDto.setItemcount(all.get(i).getItemCount());
-            bucketResponseDto.setDelivery(all.get(i).getProduct().getDeliveryFee());
+            bucketResponseDto.setItemCount(all.get(i).getItemCount());
+//            bucketResponseDto.setDelivery(all.get(i).getProduct().getDeliveryFee());
             list.add(bucketResponseDto);
         }
         return list;

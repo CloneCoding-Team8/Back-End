@@ -9,10 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BucketResponseDto {
     private Long id;
-    private String productimg;
+    private String productImg;
     private String title;
-    private int itemcount;
+    private int itemCount;
     private int price;
-    private int delivery;
-
+    private String commaPrice;
+    private int deliveryFee;
+    private String commaDeliveryFee;
 }
