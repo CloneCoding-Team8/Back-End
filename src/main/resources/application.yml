@@ -1,8 +1,8 @@
 #cloud:
 #  aws:
 #    credentials:
-#      accessKey: AKIASUNHMYD4J6N2ZPBD
-#      secretKey: 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
+#      accessKey: 
+#      secretKey: 
 #    s3:
 #      bucket:
 #        url: https://s3.ap-northeast-2.amazonaws.com/miniproject-coffeebara
