@@ -26,7 +26,7 @@ public class ProductController {
     public void createProduct(@RequestPart(value = "img",required = false) MultipartFile multipartFile,
                               @RequestPart(value = "productRequestDto") ProductRequestDto productRequestDto) {
 
-        productService.createProduct(productRequestDto,multipartFile);
+        productService.createProduct(productRequestDto, multipartFile);
     }
 
     @GetMapping("/api/product/list/{productid}")
