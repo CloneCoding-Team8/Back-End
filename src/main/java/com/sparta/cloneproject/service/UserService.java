@@ -72,7 +72,7 @@ public class UserService {
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
 //        ResponseMap result = new ResponseMap();
 
-        Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
+        Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(13));
         try {
             // AccessToken은 만료되었지만 RefreshToken은 만료되지 않은 경우
             if (jwtTokenProvider.validateToken(dbrefreshtoken.getRefreshtoken())) {
