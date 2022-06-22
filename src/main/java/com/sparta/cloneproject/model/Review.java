@@ -45,14 +45,6 @@ public class Review extends Timestamped {
         this.nickname = nickname;
     }
 
-//    public Review(ReviewRequestDto requestDto, String content, Long productid,String nickname,String username) {
-//        this.productid = productid();
-//        this.nickname = pickname();
-//        this.content = content;
-//        this.username = psername();
-//        this.star = requestDto.getStar();
-//    }
-
     public void reviewUpdate(ReviewRequestDto requestDto) {
         this.content = requestDto.getContent();
         this.star = requestDto.getStar();

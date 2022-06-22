@@ -1,6 +1,8 @@
 package com.sparta.cloneproject.service;
 
+import com.sparta.cloneproject.model.Product;
 import com.sparta.cloneproject.model.Review;
+import com.sparta.cloneproject.repository.ProductRepository;
 import com.sparta.cloneproject.repository.ReviewRepository;
 import com.sparta.cloneproject.requestdto.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.Objects;
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
     private final AwsS3Service s3Service;
 
 
@@ -37,6 +40,10 @@ public class ReviewService {
         Map<String, String> reviewimg = s3Service.uploadFile(itemimg);
         Review review = new Review(productid, requestDto, reviewimg, nickname, username);
         reviewRepository.save(review);
+
+        Product product = productRepository.findById(productid).orElse(null);
+        product.upreviewcount();
+        product.setStar(product.getStar() + (double)requestDto.getStar());
         return review;
     }
 
@@ -57,8 +64,17 @@ public class ReviewService {
     public String deleteReview(Long reviewid, String username) {
         String writerId = reviewRepository.findById(reviewid).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")).getUsername();
+
+        Review review = reviewRepository.findById(reviewid).orElse(null);
+        Long productid = review.getProductid();
+
         if (Objects.equals(writerId, username)) {
+            Product product = productRepository.findById(productid).orElse(null);
+            product.downreviewcount();
+            product.setStar(product.getStar() - (double)review.getStar());
+
             reviewRepository.deleteById(reviewid);
+
             return "후기 삭제 완료";
         }
         return "작성한 유저가 아닙니다.";

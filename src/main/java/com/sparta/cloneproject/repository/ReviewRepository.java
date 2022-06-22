@@ -11,8 +11,8 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 //    List<Review> findAllByProductidOrderByCreatedAtDesc(Long productid);
     Page<Review> findAllByProductidOrderByCreatedAtDesc(Long productid, Pageable pageable);
+
     List<Review> findByProductid(Long prductid);
 
     List<Review> findAllByProductid(Long productid);
-
 }

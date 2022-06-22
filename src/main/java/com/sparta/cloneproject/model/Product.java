@@ -47,11 +47,11 @@ public class Product extends Timestamped {
         this.price = productRequestDto.getPrice();
     }
 
-    public Product(ProductRequestDto requestDto, String productimg, Long productId) {
-        this.id = productId;
-        this.title = requestDto.getTitle();
-        this.deliveryFee = requestDto.getDeliveryFee();
-        this.price = requestDto.getPrice();
-        this.productimg = productimg;
+    public void upreviewcount(){
+        reviewCount++;
+    }
+
+    public void downreviewcount(){
+        reviewCount--;
     }
 }
