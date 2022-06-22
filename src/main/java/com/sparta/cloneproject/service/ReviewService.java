@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,7 +43,7 @@ public class ReviewService {
 
         Product product = productRepository.findById(productid).orElse(null);
         product.upreviewcount();
-        product.setAvgstar(avgstar(productid));
+        product.setStar(product.getStar() + (double)requestDto.getStar());
         return review;
     }
 
@@ -72,24 +71,12 @@ public class ReviewService {
         if (Objects.equals(writerId, username)) {
             Product product = productRepository.findById(productid).orElse(null);
             product.downreviewcount();
+            product.setStar(product.getStar() - (double)review.getStar());
 
             reviewRepository.deleteById(reviewid);
 
-            product.setAvgstar(avgstar(productid));
             return "후기 삭제 완료";
         }
         return "작성한 유저가 아닙니다.";
-    }
-
-    // 리뷰 평균 별점
-    public double avgstar(Long productid){
-        List<Review> starlist = reviewRepository.findAllByProductid(productid);
-        double sumstar = 0;
-        double avgstar = 0;
-        for (Review review : starlist) {
-            double star = review.getStar();
-            sumstar += star;
-        }
-        return avgstar = sumstar / (double)starlist.size();
     }
 }
