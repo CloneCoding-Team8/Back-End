@@ -44,7 +44,10 @@ public class Product extends Timestamped {
     private int deliveryFee;
 
     @Column
-    private int star;
+    private double avgstar;
+
+    @Column
+    private int reviewcount = 0;
 
 
     public Product(ProductRequestDto productRequestDto, Map<String , String> imgResult) {
@@ -52,5 +55,13 @@ public class Product extends Timestamped {
         this.productimg = imgResult.get("url");
         this.deliveryFee = productRequestDto.getDeliveryFee();
         this.price = productRequestDto.getPrice();
+    }
+
+    public void upreviewcount(){
+        reviewcount++;
+    }
+
+    public void downreviewcount(){
+        reviewcount--;
     }
 }
