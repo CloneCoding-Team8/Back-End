@@ -35,7 +35,7 @@ class ProductTest {
 
         // then
             //assertNull(product.getProductId());
-            assertEquals(productId, product.getProductId());
+            assertEquals(productId, product.getId());
             assertEquals(title, product.getTitle());
             assertEquals(productimg, product.getProductimg());
             assertEquals(price, product.getPrice());

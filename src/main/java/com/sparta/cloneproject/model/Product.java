@@ -14,18 +14,12 @@ import java.util.Map;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SequenceGenerator(
-        name = "PRODUCT_ID_GENERATOR",
-        sequenceName = "PRODUCT_SEQUENCES",
-        initialValue = 1, allocationSize = 1
-)
 @Table(name = "PRODUCT")
 public class Product extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "POST_ID_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -54,7 +48,7 @@ public class Product extends Timestamped {
     }
 
     public Product(ProductRequestDto requestDto, String productimg, Long productId) {
-        this.productId = productId;
+        this.id = productId;
         this.title = requestDto.getTitle();
         this.deliveryFee = requestDto.getDeliveryFee();
         this.price = requestDto.getPrice();

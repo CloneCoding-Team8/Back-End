@@ -69,11 +69,11 @@ public class ReviewController {
 
     // Review 삭제
     @DeleteMapping("/api/review/{reviewid}")
-    public String deleteReview(@PathVariable Long reviewid,
+    public void deleteReview(@PathVariable Long reviewid,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
+        reviewService.deleteReview(reviewid, username);
         productService.reveiwCountR(reviewid);
         productService.avgStarR(reviewid);
-        return reviewService.deleteReview(reviewid, username);
     }
 }
