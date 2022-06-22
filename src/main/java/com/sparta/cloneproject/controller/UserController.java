@@ -3,23 +3,21 @@ package com.sparta.cloneproject.controller;
 import com.sparta.cloneproject.requestdto.RefreshTokenRequestDto;
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
-import com.sparta.cloneproject.responsedto.UserResponseDto;
 import com.sparta.cloneproject.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+
 
     //회원가입
     @PostMapping("/signup")
@@ -51,7 +49,7 @@ public class UserController {
 
         System.out.println(refreshTokenRequestDto.getRefreshtoken());
         System.out.println(refreshTokenRequestDto.getUsername());
-        
+
         return userService.logout(refreshTokenRequestDto);
     }
 }
