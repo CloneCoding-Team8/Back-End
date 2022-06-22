@@ -3,16 +3,12 @@ package com.sparta.cloneproject.service;
 import com.sparta.cloneproject.model.Product;
 import com.sparta.cloneproject.repository.ProductRepository;
 import com.sparta.cloneproject.requestdto.ProductRequestDto;
-import jdk.jfr.events.SocketReadEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,9 +27,8 @@ public class ProductService {
     }
 
     //상품 상세페이지
-    public Optional<Product> getProductDetails(Long productId){
-        Optional<Product> product = productRepository.findById(productId);
-        return product;
+    public Optional<Product> getProductDetails(Long productId) {
+        return productRepository.findById(productId);
     }
 
     //전체상품 리스팅 int page, int size, String sortBy, boolean isAsc
@@ -41,9 +36,6 @@ public class ProductService {
 //        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
 //        Sort sort = Sort.by(direction, sortBy);
 //        Pageable pageable = PageRequest.of(page, size, sort);
-
-        Page<Product> productList = productRepository.findAllByOrderByCreatedAtDesc(pageble);
-
-        return productList;
+        return productRepository.findAllByOrderByCreatedAtDesc(pageble);
     }
 }
