@@ -51,8 +51,7 @@ public class ReviewController {
         String username = userDetails.getUsername();
         String nickname = userDetails.getNickname();
         reviewService.createReview(productid, itemimg, requestDto, nickname, username);
-        productService.reveiwCountP(productid);
-        productService.avgStarP(productid);
+
         return "후기 작성 완료";
     }
 
@@ -62,18 +61,16 @@ public class ReviewController {
                                @RequestBody ReviewRequestDto requestDto,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
-        productService.reveiwCountR(reviewid);
-        productService.avgStarR(reviewid);
+
         return reviewService.updateReview(reviewid, requestDto, username);
     }
 
     // Review 삭제
     @DeleteMapping("/api/review/{reviewid}")
-    public void deleteReview(@PathVariable Long reviewid,
+    public String deleteReview(@PathVariable Long reviewid,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
-        reviewService.deleteReview(reviewid, username);
-        productService.reveiwCountR(reviewid);
-        productService.avgStarR(reviewid);
+
+        return reviewService.deleteReview(reviewid, username);
     }
 }

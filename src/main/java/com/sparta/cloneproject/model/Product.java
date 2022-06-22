@@ -37,7 +37,7 @@ public class Product extends Timestamped {
     private double star;
 
     @Column
-    private int reviewCount;
+    private int reviewCount = 0;
 
 
     public Product(ProductRequestDto productRequestDto, Map<String , String> imgResult) {
