@@ -8,6 +8,7 @@ import com.sparta.cloneproject.model.UserRoleEnum;
 import com.sparta.cloneproject.repository.AuthRepository;
 import com.sparta.cloneproject.repository.UserRepository;
 import com.sparta.cloneproject.requestdto.RefreshTokenRequestDto;
+import com.sparta.cloneproject.requestdto.UserMailRequestDto;
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
 import com.sparta.cloneproject.security.JWT.JwtTokenProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final AuthRepository authRepository;
+    private final MailService emailService;
 
     //회원가입
     public ResponseEntity<?> signupUser(UserRequestDto singUpData) {
@@ -63,6 +66,20 @@ public class UserService {
         }
         User user = userRepository.findByUsername(loginData.getUsername()).orElse(null);
         return createJwtToken(user);
+    }
+
+    //비밀번호 찾기(e-mail 발송)
+    public ResponseEntity<?> sendUserPassword(UserMailRequestDto userMailRequestDto) throws MessagingException {
+        System.out.println(userMailRequestDto.getUsername());
+        System.out.println(userMailRequestDto.getUseremail());
+        try {
+            userRepository.findByUsername(userMailRequestDto.getUsername());
+            emailService.sendUserPassword(userMailRequestDto);
+        } catch (NullPointerException e) {
+//            throw new NullPointerException("아이디가 존재하지 않습니다");
+            return new ResponseEntity<>("아이디와 이메일을 확인해 주세요",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //Access 토큰 재발급
