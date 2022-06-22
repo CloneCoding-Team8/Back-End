@@ -16,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
     private final AwsS3Service s3Service;
 
     //새 상품 등록(백엔드용)
@@ -31,11 +30,8 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
-    //전체상품 리스팅 int page, int size, String sortBy, boolean isAsc
+    //전체상품 리스팅
     public Page<Product> getAllProductList(Pageable pageble) {
-//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-//        Sort sort = Sort.by(direction, sortBy);
-//        Pageable pageable = PageRequest.of(page, size, sort);
         return productRepository.findAllByOrderByCreatedAtDesc(pageble);
     }
 }

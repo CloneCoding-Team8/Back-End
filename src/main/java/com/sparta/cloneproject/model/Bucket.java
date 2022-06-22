@@ -6,23 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@SequenceGenerator(
-        name = "BUCKET_ID_GENERATOR",
-        sequenceName = "BUCKET_SEQUENCES",
-        initialValue = 1, allocationSize = 1
-)
 @Table(name = "BUCKET")
 public class Bucket {
 
     @Id
     @Column(name = "bucket_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                    generator = "BUCKET_ID_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonIgnore
@@ -35,6 +30,7 @@ public class Bucket {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Min(1)
     @Column(nullable = false)
     private int itemCount;
 
