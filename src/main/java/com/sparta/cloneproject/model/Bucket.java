@@ -17,7 +17,7 @@ public class Bucket {
 
     @Id
     @Column(name = "bucket_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @JsonIgnore

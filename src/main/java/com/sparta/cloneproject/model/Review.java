@@ -14,7 +14,7 @@ import java.util.Map;
 public class Review extends Timestamped {
 
     // ID가 자동으로 생성 및 증가합니다.
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
 

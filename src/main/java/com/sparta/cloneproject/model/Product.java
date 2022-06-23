@@ -18,7 +18,7 @@ import java.util.Map;
 @Table(name = "PRODUCT")
 public class Product extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
     private Long id;
 
