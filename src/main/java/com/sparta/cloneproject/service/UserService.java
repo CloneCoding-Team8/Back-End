@@ -8,6 +8,7 @@ import com.sparta.cloneproject.model.UserRoleEnum;
 import com.sparta.cloneproject.repository.AuthRepository;
 import com.sparta.cloneproject.repository.UserRepository;
 import com.sparta.cloneproject.requestdto.RefreshTokenRequestDto;
+import com.sparta.cloneproject.requestdto.UserMailRequestDto;
 import com.sparta.cloneproject.requestdto.UserRequestDto;
 import com.sparta.cloneproject.responsedto.JwtResponseDto;
 import com.sparta.cloneproject.security.JWT.JwtTokenProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -32,19 +34,16 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final AuthRepository authRepository;
+    private final MailService emailService;
 
     //회원가입
     public ResponseEntity<?> signupUser(UserRequestDto singUpData) {
-//        UserResponseDto userResponseDto = new UserResponseDto();
         UserRoleEnum role = UserRoleEnum.USER;
 
         User beforeSaveUser = new User(singUpData, role);
         beforeSaveUser.encryptPassword(passwordEncoder);
         userRepository.save(beforeSaveUser);
 
-//        userResponseDto.setCode(201);
-//        userResponseDto.setMessage("회원가입이 완료되었습니다.");
-//        userResponseDto.setStstus(HttpStatus.CREATED);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -59,17 +58,29 @@ public class UserService {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginData.getUsername(), loginData.getPassword()));
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             throw new AuthenticationException(ErrorCode.UsernameOrPasswordNotFoundException);
         }
         User user = userRepository.findByUsername(loginData.getUsername()).orElse(null);
         return createJwtToken(user);
     }
 
+    //비밀번호 찾기(e-mail 발송)
+    public ResponseEntity<?> sendUserPassword(UserMailRequestDto userMailRequestDto) throws MessagingException {
+        System.out.println(userMailRequestDto.getUsername());
+        System.out.println(userMailRequestDto.getUseremail());
+        try {
+            userRepository.findByUsername(userMailRequestDto.getUsername());
+            emailService.sendUserPassword(userMailRequestDto);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>("아이디와 이메일을 확인해 주세요", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //Access 토큰 재발급
     public JwtResponseDto newAccessToken(RefreshTokenRequestDto refreshTokenRequestDto) {
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
-//        ResponseMap result = new ResponseMap();
 
         Auth dbrefreshtoken = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(13));
         try {
@@ -82,17 +93,12 @@ public class UserService {
                 jwtResponseDto.setAccesstoken(accessToken);
                 jwtResponseDto.setMessage("새로운 Access토큰이 발급되었습니다.");
 
-//                result.setResponseData("accessToken", accessToken);
-//                result.setResponseData("message", "새로운 토큰이 발급되었습니다.");
             } else {
                 // RefreshToken 또한 만료된 경우는 로그인을 다시 진행해야 한다.
                 jwtResponseDto.setCode(ErrorCode.ReLogin.getCode());
                 jwtResponseDto.setMessage(ErrorCode.ReLogin.getMessage());
                 jwtResponseDto.setErrorststus(ErrorCode.ReLogin.getStatus());
 
-//                result.setResponseData("code", ErrorCode.ReLogin.getCode());
-//                result.setResponseData("message", ErrorCode.ReLogin.getMessage());
-//                result.setResponseData("HttpStatus", ErrorCode.ReLogin.getStatus());
                 Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken());
                 authRepository.delete(auth);
             }
@@ -102,9 +108,6 @@ public class UserService {
             jwtResponseDto.setMessage(ErrorCode.UNAUTHORIZEDException.getMessage());
             jwtResponseDto.setErrorststus(ErrorCode.UNAUTHORIZEDException.getStatus());
 
-//            result.setResponseData("code", ErrorCode.UNAUTHORIZEDException.getCode());
-//            result.setResponseData("message", ErrorCode.UNAUTHORIZEDException.getMessage());
-//            result.setResponseData("HttpStatus", ErrorCode.UNAUTHORIZEDException.getStatus());
         }
         return jwtResponseDto;
     }
@@ -112,7 +115,6 @@ public class UserService {
     //로그아웃
     public ResponseEntity<?> logout(RefreshTokenRequestDto refreshTokenRequestDto) {
         Auth auth = authRepository.findByRefreshtoken(refreshTokenRequestDto.getRefreshtoken().substring(13));
-//        Auth auth = authRepository.findByUsername(refreshTokenRequestDto.getUsername());
         authRepository.delete(auth);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -120,7 +122,6 @@ public class UserService {
     //JWT 토큰 생성기
     private JwtResponseDto createJwtToken(User user) {
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
-//        ResponseMap result = new ResponseMap();
 
         String accessToken = jwtTokenProvider.createnewAccessToken(user);
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
@@ -132,9 +133,6 @@ public class UserService {
         jwtResponseDto.setAccesstoken(accessToken);
         jwtResponseDto.setRefreshtoken(refreshToken);
         jwtResponseDto.setMessage("Access토큰과 Refresh토큰이 발급되었습니다.");
-
-//        result.setResponseData("accessToken", accessToken);
-//        result.setResponseData("refreshToken", refreshToken);
 
         return jwtResponseDto;
     }

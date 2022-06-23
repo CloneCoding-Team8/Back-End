@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,20 +41,19 @@ public class ReviewController {
 
     // Review 작성
     @PostMapping("/api/review/{productid}")
-    public String createReview(@PathVariable Long productid,
-                               @RequestPart(value = "itemimg", required = false) MultipartFile itemimg,
-                               @RequestPart(value = "reviewdata") ReviewRequestDto requestDto,
-                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> createReview(@PathVariable Long productid,
+                                          @RequestPart(value = "itemimg", required = false) MultipartFile itemimg,
+                                          @RequestPart(value = "reviewdata") ReviewRequestDto requestDto,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
         String nickname = userDetails.getNickname();
-        reviewService.createReview(productid, itemimg, requestDto, nickname, username);
 
-        return "후기 작성 완료";
+        return reviewService.createReview(productid, itemimg, requestDto, nickname, username);
     }
 
     // Review 수정
     @PatchMapping("/api/review/{reviewid}")
-    public String updateReview(@PathVariable Long reviewid,
+    public ResponseEntity<?> updateReview(@PathVariable Long reviewid,
                                @RequestBody ReviewRequestDto requestDto,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
@@ -63,10 +63,11 @@ public class ReviewController {
 
     // Review 삭제
     @DeleteMapping("/api/review/{reviewid}")
-    public void deleteReview(@PathVariable Long reviewid,
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewid,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
 
-        reviewService.deleteReview(reviewid, username);
+        return reviewService.deleteReview(reviewid, username);
+
     }
 }

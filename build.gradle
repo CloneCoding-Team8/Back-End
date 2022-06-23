@@ -57,8 +57,12 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
     implementation 'org.json:json:20220320'
+
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 }
 
 tasks.named('test') {
