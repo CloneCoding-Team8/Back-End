@@ -4,6 +4,7 @@ import com.sparta.cloneproject.model.User;
 import com.sparta.cloneproject.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,8 @@ public class JwtTokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
 
     // jwt 시크릿 키
-    private String secretKey = "A1000forStoreZ";
+    @Value("${jwt.secretKey}")
+    private String secretKey;
 
 
     private final long accessTokenValidTime = 10 * 60 * 1000L;   // access 토큰 유효시간 5분
@@ -66,13 +68,13 @@ public class JwtTokenProvider {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
 
-        Map<String, Object> payloads = new HashMap<>();
-        payloads.put("username", user.getUsername());
+//        Map<String, Object> payloads = new HashMap<>();
+//        payloads.put("username", user.getUsername());
 
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setHeader(headers)
-                .setClaims(payloads)
+//                .setClaims(payloads)
 //                .setSubject(user.getUsername())
 
                 //토큰 생성 시간
