@@ -72,7 +72,7 @@ public class UserService {
             userRepository.findByUsername(userMailRequestDto.getUsername());
             emailService.sendUserPassword(userMailRequestDto);
         } catch (NullPointerException e) {
-            return new ResponseEntity<>("아이디와 이메일을 확인해 주세요",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("아이디와 이메일을 확인해 주세요", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
