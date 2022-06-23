@@ -65,11 +65,13 @@ public class BucketService {
             BucketResponseDto bucketResponseDto = new BucketResponseDto();
             Product bucketProduct = bucket.getProduct();
             bucketResponseDto.setId(bucket.getId());
-            bucketResponseDto.setProductimg(bucketProduct.getProductimg());
-            bucketResponseDto.setDelivery(bucketProduct.getDeliveryFee());
+            bucketResponseDto.setProductImg(bucketProduct.getProductimg());
+            bucketResponseDto.setDeliveryFee(bucketProduct.getDeliveryFee());
             bucketResponseDto.setPrice(bucketProduct.getPrice());
             bucketResponseDto.setTitle(bucketProduct.getTitle());
-            bucketResponseDto.setItemcount(bucket.getItemCount());
+            bucketResponseDto.setItemCount(bucket.getItemCount());
+            bucketResponseDto.setCommaPrice(bucket.getProduct().getCommaPrice());
+            bucketResponseDto.setCommaDeliveryFee(bucket.getProduct().getCommaDeliveryFee());
 
             list.add(bucketResponseDto);
         }

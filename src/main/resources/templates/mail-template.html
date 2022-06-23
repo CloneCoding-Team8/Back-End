@@ -1,43 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div></div>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div></div>-->
 
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th style="height: 50px;, width: 150px;, align-content: center">상품</th>
-                <th style="height: 50px;, width: 50px;, align-content: center">수량</th>
-                <th style="height: 50px;, width: 50px;, align-content: center">상품금액</th>
-                <th style="height: 50px;, width: 50px;, align-content: center">배송비</th>
-                <!--            <th>합계금액</th>-->
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="orderList : ${text}" th:align="center">
-                <td th:text="${orderList.title}"></td>
-                <td th:text="${orderList.itemcount}"></td>
-                <td th:text="${orderList.price}"></td>
-                <td th:text="${orderList.delivery}"></td>
-                <!--            <td th:text="${orderList.totalprice}"></td>-->
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>합계</th>
-                <th>3</th>
-                <th>20000</th>
-                <th>2000</th>
-                <th>22000</th>
-                <!--            <th>합계금액</th>-->
-            </tr>
-        </tfoot>
-    </table>
+<!--    <table class="table">-->
+<!--        <thead class="table-dark">-->
+<!--            <tr>-->
+<!--                <th style="height: 50px;, width: 150px;, align-content: center">상품</th>-->
+<!--                <th style="height: 50px;, width: 50px;, align-content: center">수량</th>-->
+<!--                <th style="height: 50px;, width: 50px;, align-content: center">상품금액</th>-->
+<!--                <th style="height: 50px;, width: 50px;, align-content: center">배송비</th>-->
+<!--                &lt;!&ndash;            <th>합계금액</th>&ndash;&gt;-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            <tr th:each="orderList : ${text}" th:align="center">-->
+<!--                <td th:text="${orderList.title}"></td>-->
+<!--                <td th:text="${orderList.itemcount}"></td>-->
+<!--                <td th:text="${orderList.price}"></td>-->
+<!--                <td th:text="${orderList.delivery}"></td>-->
+<!--                &lt;!&ndash;            <td th:text="${orderList.totalprice}"></td>&ndash;&gt;-->
+<!--            </tr>-->
+<!--        </tbody>-->
+<!--        <tfoot>-->
+<!--            <tr>-->
+<!--                <th>합계</th>-->
+<!--                <th>3</th>-->
+<!--                <th>20000</th>-->
+<!--                <th>2000</th>-->
+<!--                <th>22000</th>-->
+<!--                &lt;!&ndash;            <th>합계금액</th>&ndash;&gt;-->
+<!--            </tr>-->
+<!--        </tfoot>-->
+<!--    </table>-->
 
-</body>
-</html>
+<!--</body>-->
+<!--</html>-->

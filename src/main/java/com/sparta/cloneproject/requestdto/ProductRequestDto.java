@@ -9,7 +9,6 @@ public class ProductRequestDto {
     private String title;
     private int price;
     private int deliveryFee;
-    private String productimg;
 
     public ProductRequestDto(String title, int price, int deliveryFee) {
         this.title = title;

@@ -50,6 +50,24 @@ public class MailService {
         emailSender.send(message);
     }
 
+
+    public List<BucketResponseDto> myOrderList() {
+        List<Bucket> all = bucketRepository.findAll();
+        List<BucketResponseDto> list = new ArrayList<>();
+        BucketResponseDto bucketResponseDto = new BucketResponseDto();
+        for (int i = 0; i < all.size(); i++) {
+            bucketResponseDto.setId(all.get(i).getId());
+            bucketResponseDto.setTitle(all.get(i).getProduct().getTitle());
+            bucketResponseDto.setPrice(all.get(i).getProduct().getPrice());
+            bucketResponseDto.setItemCount(all.get(i).getItemCount());
+            list.add(bucketResponseDto);
+        }
+        return list;
+    }
+
+
+}
+
 //    public void sendSimpleMessage(MailDto mailDto) throws MessagingException {
 //        List<BucketResponseDto> variables = myOrderList();
 //        Context context = new Context();
@@ -80,8 +98,6 @@ public class MailService {
 //        }
 //        return list;
 //    }
-}
-
 //    public void sendSimpleMessage(MailDto mailDto) {
 //        List<BucketResponseDto> variables = myOrderList();
 //        Context context = new Context();
