@@ -8,6 +8,8 @@ import com.sparta.cloneproject.requestdto.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,10 +35,10 @@ public class ReviewService {
 
     // Review 작성
     @Transactional
-    public Review createReview(Long productid, MultipartFile itemimg,
-                               ReviewRequestDto requestDto,
-                               String nickname,
-                               String username) {
+    public ResponseEntity<?> createReview(Long productid, MultipartFile itemimg,
+                                       ReviewRequestDto requestDto,
+                                       String nickname,
+                                       String username) {
         Map<String, String> reviewimg = s3Service.uploadFile(itemimg);
         Review review = new Review(productid, requestDto, reviewimg, nickname, username);
         reviewRepository.save(review);
@@ -44,12 +46,12 @@ public class ReviewService {
         Product product = productRepository.findById(productid).orElse(null);
         product.upreviewcount();
         product.setStar(product.getStar() + (double)requestDto.getStar());
-        return review;
+        return new ResponseEntity<>("리뷰 작성이 성공했습니다", HttpStatus.CREATED);
     }
 
     // Review 수정
     @Transactional
-    public String updateReview(Long reviewid, ReviewRequestDto requestDto, String username) {
+    public ResponseEntity<?> updateReview(Long reviewid, ReviewRequestDto requestDto, String username) {
         Review review = reviewRepository.findById(reviewid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않습니다."));
 
@@ -62,13 +64,13 @@ public class ReviewService {
 
             review.reviewUpdate(requestDto);
 
-            return "후기 수정 완료";
+            return new ResponseEntity<>("리뷰 수정이 성공했습니다", HttpStatus.NO_CONTENT);
         }
-        return "작성한 유저가 아닙니다.";
+        return new ResponseEntity<>("리뷰 작성자가 아닙니다", HttpStatus.FORBIDDEN);
     }
 
     // Review 삭제
-    public String deleteReview(Long reviewid, String username) {
+    public ResponseEntity<?> deleteReview(Long reviewid, String username) {
         String writerId = reviewRepository.findById(reviewid).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")).getUsername();
 
@@ -82,8 +84,8 @@ public class ReviewService {
 
             reviewRepository.deleteById(reviewid);
 
-            return "후기 삭제 완료";
+            return new ResponseEntity<>("리뷰 삭제가 성공했습니다", HttpStatus.NO_CONTENT);
         }
-        return "작성한 유저가 아닙니다.";
+        return new ResponseEntity<>("리뷰 작성자가 아닙니다", HttpStatus.FORBIDDEN);
     }
 }
