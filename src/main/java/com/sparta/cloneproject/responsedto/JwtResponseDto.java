@@ -13,21 +13,4 @@ public class JwtResponseDto {
 
     private String message;
     private HttpStatus errorststus;
-
-    private Object result;
-
-    public JwtResponseDto() {}
-
-    public JwtResponseDto(Object result) {
-        this.result = result;
-    }
-
-    public JwtResponseDto(int code, Object result) {
-        this.code = code;
-        this.result = result;
-    }
-
-    protected void setResult (Object result){
-        this.result = result;
-    }
 }

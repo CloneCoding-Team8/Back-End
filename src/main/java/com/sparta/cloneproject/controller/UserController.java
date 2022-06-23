@@ -46,10 +46,6 @@ public class UserController {
     //로그아웃
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-
-        System.out.println(refreshTokenRequestDto.getRefreshtoken());
-        System.out.println(refreshTokenRequestDto.getUsername());
-
         return userService.logout(refreshTokenRequestDto);
     }
 }
