@@ -73,7 +73,7 @@ public class JwtTokenProvider {
                 .setHeaderParam("typ","JWT")
                 .setHeader(headers)
                 .setClaims(payloads)
-                .setSubject(user.getUsername())
+//                .setSubject(user.getUsername())
 
                 //토큰 생성 시간
                 .setIssuedAt(new Date(System.currentTimeMillis()))
